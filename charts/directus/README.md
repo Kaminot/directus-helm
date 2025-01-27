@@ -60,6 +60,14 @@ Directus is a real-time API and App dashboard for managing SQL database content.
 | mariadb.auth.username | string | `"directus"` | The user that is being used to connect to database |
 | mariadb.enableInstallation | bool | `true` | The switch to switch off the installation of the mariadb, the rest of the settings are being used during the installation |
 | mariadb.mariadbURL | string | `""` | The URL to the mariadb instance, otherwise leave it empty to use one that installed in the cluster |
+| database.host | string | `""` | The host where the database is running (ignored if `mariadb.enableInstallation` is `true`) |
+| database.port | string | `3306` |  The database port |
+| database.database | string | `directus` | The name of the database you wish to connect to |
+| database.user | string | `directus` | The user that is being used to connect to database |
+| database.password | string | `""` | The password of the user that is being used to connect to the database |
+| database.passwordSecretName | string | `""` | The secret name containing the password of the user that is being used to connect to the database |
+| database.passwordSecretKey | string | `""` | The secret key containing the password of the user that is beeing used to connect to the database |
+| database.client | string | `mysql` | The client type can only be: `pg`, `postgres`, `mysql`, `oracledb`, `mssql`, `sqlite3` or `cockroachdb` |
 | nameOverride | string | `""` | Helm name override in Chart.yaml. This name is being used for resource naming |
 | nodeSelector | object | `{}` |  |
 | podAnnotations | object | `{}` |  |
