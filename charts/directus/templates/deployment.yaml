@@ -45,7 +45,7 @@ spec:
             - configMapRef:
                 name: {{ include "directus.fullname" . }}-configmap
           env:
-            {{- if .Values.database.passwordSecretName .Values.database.passwordSecretKey }}
+            {{- if and .Values.database.passwordSecretName .Values.database.passwordSecretKey }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
