@@ -12,6 +12,7 @@ Directus is a real-time API and App dashboard for managing SQL database content.
 | Name | Email | Url |
 | ---- | ------ | --- |
 | mikesindieiev | <sindieiev@protonmail.ch> | <https://github.com/directus-labs/helm-chart> |
+| vinc0u | <vinc0u@kaminot.com> | <https://github.com/Kaminot/directus-helm> |
 
 ## Source Code
 
