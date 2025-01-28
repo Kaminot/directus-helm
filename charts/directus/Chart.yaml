@@ -18,8 +18,11 @@ maintainers:
   - name: mikesindieiev
     email: sindieiev@protonmail.ch
     url: https://github.com/directus-labs/helm-chart
+  - name: vinc0u
+    email: vinc0u@kaminot.com
+    url: https://github.com/Kaminot/directus-helm
 
-version: 1.2.0
+version: 1.2.1
 appVersion: "11.3.2"
 
 dependencies:
