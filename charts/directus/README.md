@@ -1,6 +1,6 @@
 # directus
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 11.3.2](https://img.shields.io/badge/AppVersion-11.3.2-informational?style=flat-square)
+![Version: 1.2.3](https://img.shields.io/badge/Version-1.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 11.4.0](https://img.shields.io/badge/AppVersion-11.4.0-informational?style=flat-square)
 
 A Helm chart for installing Directus on Kubernetes.
 Directus is a real-time API and App dashboard for managing SQL database content.
@@ -30,7 +30,10 @@ Directus is a real-time API and App dashboard for managing SQL database content.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| adminEmail | string | `"admin@example.com"` |  |
+| directus.adminEmail | string | `"admin@example.com"` | The email address of the first user that's automatically created when using `directus bootstrap` |
+| directus.adminPassword | string | `"Directus12345"` | The password of the first user that's automatically created when using `directus bootstrap` |
+| directus.secret | string | `""` | Secret string for the project. |
+| directus.key | string | `""` |  |
 | affinity | object | `{}` |  |
 | attachExistingSecrets | list | `[]` |  |
 | autoscaling.enabled | bool | `false` |  |
@@ -55,20 +58,15 @@ Directus is a real-time API and App dashboard for managing SQL database content.
 | livenessProbe.enabled | bool | `true` |  |
 | livenessProbe.httpGet.path | string | `"/"` |  |
 | livenessProbe.httpGet.port | string | `"http"` |  |
-| mariadb.auth.createSecrets | bool | `true` | If you want to use your own mariadb secret, set `createSecrets` to false and update `mariadb.auth.existingSecret` field with the correct secret name |
 | mariadb.auth.database | string | `"directus"` | Directus datatbase name |
-| mariadb.auth.existingSecret | string | `"directus-secret"` | The secret has to contain the following keys `mariadb-root-password`, `mariadb-replication-password`, `mariadb-password`, `ADMIN_PASSWORD`, `KEY`, `SECRET` |
-| mariadb.auth.username | string | `"directus"` | The user that is being used to connect to database |
-| mariadb.enableInstallation | bool | `true` | The switch to switch off the installation of the mariadb, the rest of the settings are being used during the installation |
-| mariadb.mariadbURL | string | `""` | The URL to the mariadb instance, otherwise leave it empty to use one that installed in the cluster |
-| database.host | string | `""` | The host where the database is running (ignored if `mariadb.enableInstallation` is `true`) |
-| database.port | string | `3306` |  The database port |
-| database.database | string | `directus` | The name of the database you wish to connect to |
-| database.user | string | `directus` | The user that is being used to connect to database |
-| database.password | string | `""` | The password of the user that is being used to connect to the database |
-| database.passwordSecretName | string | `""` | The secret name containing the password of the user that is being used to connect to the database |
-| database.passwordSecretKey | string | `""` | The secret key containing the password of the user that is beeing used to connect to the database |
-| database.client | string | `mysql` | The client type can only be: `pg`, `postgres`, `mysql`, `oracledb`, `mssql`, `sqlite3` or `cockroachdb` |
+| mariadb.enabled | bool | `true` | The switch to switch off the installation of the mariadb, the rest of the settings are being used during the installation |
+| externalDatabase.host | string | `""` | The host where the database is running (ignored if `mariadb.enableInstallation` is `true`) |
+| externalDatabase.port | string | `3306` |  The database port |
+| externalDatabase.database | string | `directus` | The name of the database you wish to connect to |
+| externalDatabase.user | string | `directus` | The user that is being used to connect to database |
+| externalDatabase.password | string | `""` | The password of the user that is being used to connect to the database |
+| externalDatabase.existingSecret | string | `""` | The secret name containing the password of the user that is being used to connect to the database. **MUST BE** under key `database-password` |
+| externalDatabase.client | string | `mysql` | The client type can only be: `pg`, `postgres`, `mysql`, `oracledb`, `mssql`, `sqlite3` or `cockroachdb` |
 | nameOverride | string | `""` | Helm name override in Chart.yaml. This name is being used for resource naming |
 | nodeSelector | object | `{}` |  |
 | podAnnotations | object | `{}` |  |
