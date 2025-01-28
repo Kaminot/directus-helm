@@ -22,8 +22,8 @@ maintainers:
     email: vinc0u@kaminot.com
     url: https://github.com/Kaminot/directus-helm
 
-version: 1.2.1
-appVersion: "11.3.2"
+version: 1.2.2
+appVersion: "11.4.0"
 
 dependencies:
 - name: mariadb
