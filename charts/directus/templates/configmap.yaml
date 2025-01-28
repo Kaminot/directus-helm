@@ -13,6 +13,7 @@ data:
   DB_PORT: "{{ .Values.database.port }}"
   DB_DATABASE: {{- if .Values.database.database }} "{{ .Values.database.database }}" {{- else }} "{{ .Values.mariadb.auth.database }}" {{- end }}
   DB_USER: {{- if .Values.database.user }} "{{ .Values.database.user }}" {{- else }} "{{ .Values.mariadb.auth.username }}" {{- end }}
+  HOST: '::'
   ADMIN_EMAIL: "{{ .Values.adminEmail }}"
   REDIS_ENABLED: {{- if .Values.redis.enabled }} "true" {{- else }} "false" {{- end }}
   {{- if .Values.redis.enabled}}
