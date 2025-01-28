@@ -9,7 +9,7 @@ metadata:
     helm.sh/chart: {{ include "directus.chart" . }}
 data:
   DB_CLIENT: "{{ .Values.database.client }}"
-  DB_HOST: {{- if .Values.mariadb.mariadbURL }} "{{ .Values.mariadb.mariadbURL }}" {{- else if .Values.database.host }} "{{ .Values.database.host }}" {{- else }} "{{ .Release.Name }}-mariadb.{{ .Release.Namespace }}.svc.cluster.local" {{- end }}
+  DB_HOST: {{- if .Values.mariadb.mariadbURL }} "{{ .Values.mariadb.mariadbURL }}" {{- else if .Values.database.host }} "{{ .Values.database.host }}" {{- else }} "{{ .Release.Name }}-mariadb.{{ .Release.Namespace }}.svc" {{- end }}
   DB_PORT: "{{ .Values.database.port }}"
   DB_DATABASE: {{- if .Values.database.database }} "{{ .Values.database.database }}" {{- else }} "{{ .Values.mariadb.auth.database }}" {{- end }}
   DB_USER: {{- if .Values.database.user }} "{{ .Values.database.user }}" {{- else }} "{{ .Values.mariadb.auth.username }}" {{- end }}
