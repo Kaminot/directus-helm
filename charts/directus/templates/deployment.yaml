@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "directus.fullname" . }}
+  name: {{ template "directus.core" . }}
   labels:
     {{- include "directus.labels" . | nindent 4 }}
 spec:
@@ -42,51 +42,76 @@ spec:
             - secretRef:
                 name: {{ $val }}
             {{- end }}
-            - configMapRef:
-                name: {{ include "directus.fullname" . }}-configmap
           env:
-            {{- if and .Values.database.passwordSecretName .Values.database.passwordSecretKey }}
+            - name: DB_CLIENT
+              value: {{ include "directus.databaseClient" . | quote }}
+            - name: DB_HOST
+              value: {{ include "directus.databaseHost" . | quote }}
+            - name: DB_PORT
+              value: {{ include "directus.databasePort" . | quote }}
+            - name: DB_DATABASE
+              value: {{ include "directus.databaseName" . | quote }}
+            - name: DB_USER
+              value: {{ include "directus.databaseUser" . | quote }}
+            - name: ADMIN_EMAIL
+              value: {{ .Values.directus.adminEmail | quote }}
+            - name: HOST
+              value: "::"
+            - name: REDIS_ENABLED
+              value: {{ .Values.redis.enabled | quote }}
+              {{- if .Values.redis.enabled }}
+            - name: REDIS_HOST
+              value: "{{ .Release.Name }}-redis-master"
+            - name: REDIS_HOST
+              value: "6379"
+            - name: REDIS_USERNAME
+              value: "default"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.redis.auth.existingSecret}}
+                  name: {{ .Values.redis.auth.existingSecret }}
+                  {{- else }}
+                  name: {{ .Release.Name }}-redis
+                  {{- end }}
+                  {{- if .Values.redis.auth.existingSecretPasswordKey }}
+                  key: {{ .Values.redis.auth.existingSecretPasswordKey }}
+                  {{- else }}
+                  key: redis-password
+                  {{- end }}
+              {{- end }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.passwordSecretName }}
-                  key: {{ .Values.database.passwordSecretKey }}
-            {{- else if .Values.database.password }}
-            - name: DB_PASSWORD
-              value: {{ .Values.database.password }}
-            {{- else }}
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.mariadb.auth.existingSecret }}
+                  name: {{ include "directus.databaseSecretName" . }}
+                  {{- if .Values.mariadb.auth.username }}
                   key: mariadb-password
-            {{- end }}
+                  {{- else if .Values.mariadb.enabled }}
+                  key: mariadb-root-password
+                  {{- else }}
+                  key: database-password
+                  {{- end }}
             - name: ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.mariadb.auth.existingSecret }}
+                  name: {{ template "directus.core" . }}
                   key: ADMIN_PASSWORD
             - name: SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.mariadb.auth.existingSecret }}
+                  name: {{ template "directus.core" . }}
                   key: SECRET
             - name: KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.mariadb.auth.existingSecret }}
+                  name: {{ template "directus.core" . }}
                   key: KEY
-            {{- if .Values.ingress.enabled }}
             - name: PUBLIC_URL
-              value: http{{ if .Values.ingress.enableTLS }}s{{ end }}://{{(index .Values.ingress.hosts 0).host }}
-            {{- end }}
-            {{- if .Values.redis.enabled}}
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{- if .Values.redis.auth.existingSecret}} {{ .Values.redis.auth.existingSecret }} {{- else }} {{ .Release.Name }}-redis {{- end }}
-                  key: {{- if .Values.redis.auth.existingSecretPasswordKey }} {{ .Values.redis.auth.existingSecretPasswordKey }} {{- else }} redis-password {{- end }}
-            {{- end }}
+              {{- if .Values.ingress.enabled }}
+              value: http{{- if .Values.ingress.enableTLS }}s{{- end }}://{{(index .Values.ingress.hosts 0).host }}
+              {{- else }}
+              value: {{ .Values.directus.publicUrl }}
+              {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- tpl (toYaml .Values.extraEnvVars) $ | nindent 12 }}
             {{- end }}
