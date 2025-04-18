@@ -107,11 +107,7 @@ spec:
                   name: {{ template "directus.core" . }}
                   key: KEY
             - name: PUBLIC_URL
-              {{- if .Values.ingress.enabled }}
-              value: http{{- if .Values.ingress.enableTLS }}s{{- end }}://{{(index .Values.ingress.hosts 0).host }}
-              {{- else }}
-              value: {{ .Values.directus.publicUrl }}
-              {{- end }}
+              value: {{ .Values.directus.publicUrl | quote }}
             {{- if .Values.extraEnvVars }}
             {{- tpl (toYaml .Values.extraEnvVars) $ | nindent 12 }}
             {{- end }}

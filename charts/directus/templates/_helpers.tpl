@@ -169,7 +169,7 @@ Return the MariaDB Secret Name
         {{- printf "%s" (include "directus.mariadb.fullname" .) -}}
     {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
-    {{- include "common.tplvalues.render" (dict "value" .Values.externalDatabase.existingSecret "context" $) -}}
+    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
     {{- printf "%s-externaldb" (include "directus.fullname" .) -}}
 {{- end -}}
@@ -182,6 +182,6 @@ Return the Directus database client type
 {{- if .Values.mariadb.enabled }}
     {{- printf "mysql" -}}
 {{- else -}}
-    {{- printf "%s" ".Values.externalDatabase.client" -}}
+    {{- printf "%s" .Values.externalDatabase.client -}}
 {{- end -}}
 {{- end -}}
